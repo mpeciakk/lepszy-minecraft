@@ -39,12 +39,12 @@ tasks.jar {
 
 application {
     mainClass.set("MainKt")
-    applicationDefaultJvmArgs = listOf("-Xmx4G", "-XstartOnFirstThread")
 }
 
 tasks {
     processResources {
         from("src/main/resources")
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }
 
