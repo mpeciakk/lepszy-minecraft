@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.20"
+    application
 }
 
 group = "mpeciakk"
@@ -11,9 +12,7 @@ val jomlVersion = "1.10.5"
 val lwjglNatives = Pair(
     System.getProperty("os.name")!!,
     System.getProperty("os.arch")!!
-).let { (name, arch) ->
-    println(arch)
-
+).let { (name, _) ->
     when {
         arrayOf("Linux", "FreeBSD", "SunOS", "Unit").any { name.startsWith(it) } ->
             "natives-linux"
@@ -28,6 +27,27 @@ val lwjglNatives = Pair(
     }
 }
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "MainKt"
+    }
+    configurations["compileClasspath"].forEach { file: File ->
+        from(zipTree(file.absoluteFile))
+    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+application {
+    mainClass.set("MainKt")
+    applicationDefaultJvmArgs = listOf("-Xmx4G", "-XstartOnFirstThread")
+}
+
+tasks {
+    processResources {
+        from("src/main/resources")
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -38,14 +58,10 @@ dependencies {
     implementation("org.lwjgl", "lwjgl")
     implementation("org.lwjgl", "lwjgl-glfw")
     implementation("org.lwjgl", "lwjgl-opengl")
-    runtimeOnly("org.lwjgl", "lwjgl", classifier = lwjglNatives)
-    runtimeOnly("org.lwjgl", "lwjgl-glfw", classifier = lwjglNatives)
-    runtimeOnly("org.lwjgl", "lwjgl-opengl", classifier = lwjglNatives)
+    implementation("org.lwjgl", "lwjgl", classifier = lwjglNatives)
+    implementation("org.lwjgl", "lwjgl-glfw", classifier = lwjglNatives)
+    implementation("org.lwjgl", "lwjgl-opengl", classifier = lwjglNatives)
     implementation("org.joml", "joml", jomlVersion)
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
 
 kotlin {

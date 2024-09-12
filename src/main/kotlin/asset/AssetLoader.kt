@@ -51,6 +51,7 @@ class AssetLoader : AssetLoaderBase() {
     fun load() {
         queueAsset("default", Shader::class.java)
         queueAsset("instanced_test", Shader::class.java)
-        queueAll("/textures", Texture::class.java)
+        queueAsset("cobblestone", Texture::class.java)
+//        queueAll("/textures", Texture::class.java)
     }
 }

@@ -59,11 +59,11 @@ open class AssetLoaderBase {
         queue.add(Pair(name, assetType))
     }
 
-    fun queueAll(path: String, assetType: Class<*>) {
-        for (file in getFiles(path)) {
-            queueAsset(file.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0], assetType)
-        }
-    }
+//    fun queueAll(path: String, assetType: Class<*>) {
+//        for (file in getFiles(path)) {
+//            queueAsset(file.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0], assetType)
+//        }
+//    }
 
     fun loadAssets() {
         val n = queue.size
@@ -78,24 +78,24 @@ open class AssetLoaderBase {
         }
     }
 
-    fun getFiles(path: String): List<String> {
-        val results = mutableListOf<String>()
-        var files = arrayOf<File>()
-
-        try {
-            files = File(getResource(path).toURI()).listFiles() ?: error("Can't find any files in $path")
-        } catch (e: URISyntaxException) {
-            e.printStackTrace()
-        }
-
-        for (file in files) {
-            if (file.isFile) {
-                results.add(file.name)
-            }
-        }
-
-        return results
-    }
+//    fun getFiles(path: String): List<String> {
+//        val results = mutableListOf<String>()
+//        var files = arrayOf<File>()
+//
+//        try {
+//            files = File(getResource(path).toURI()).listFiles() ?: error("Can't find any files in $path")
+//        } catch (e: URISyntaxException) {
+//            e.printStackTrace()
+//        }
+//
+//        for (file in files) {
+//            if (file.isFile) {
+//                results.add(file.name)
+//            }
+//        }
+//
+//        return results
+//    }
 
     fun getTextFile(path: String): String {
         try {
@@ -123,14 +123,14 @@ open class AssetLoaderBase {
             path = "/$path"
         }
 
-        val url = getResource(path)
+//        val url = getResource(path)
 
-        return url.openStream() ?: error("Failed opening input stream for file $path")
+        return  AssetLoaderBase::class.java.getResourceAsStream(path) ?: error("Failed opening input stream for file $path")
     }
 
-    fun getResource(path: String): URL {
-        return AssetLoaderBase::class.java.getResource(path) ?: error("Can't find any resource in $path")
-    }
+//    fun getResource(path: String): URL {
+//        return AssetLoaderBase::class.java.getResource(path) ?: error("Can't find any resource in $path")
+//    }
 
     abstract class Deserializer<T> {
         abstract fun deserialize(name: String): T

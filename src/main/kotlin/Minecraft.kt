@@ -28,8 +28,8 @@ class Minecraft(private val window: Window) : Destroyable {
     }
 
     fun create() {
-        for (x in 0..<4) {
-            for (z in 0..<4) {
+        for (x in 0..<1) {
+            for (z in 0..<1) {
                 val chunk = Chunk(x, z)
                 chunk.state = ChunkState.TO_BUILD
                 chunks.add(chunk)
