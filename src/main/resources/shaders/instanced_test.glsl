@@ -32,10 +32,10 @@ vec3 rotateQuad(vec2 pos, int normal) {
 }
 
 void main() {
-    int x = data & 0xF;
-    int y = (data >> 4) & 0x1FF;
-    int z = (data >> 13) & 0xF;
-    int n = (data >> 17) & 0x1F;
+    int x = data & 0x1F;
+    int y = (data >> 5) & 0x1F;
+    int z = (data >> 10) & 0x1F;
+    int n = (data >> 15) & 0x1F;
     position = rotateQuad(inPosition, n) + vec3(x, y, z);
     uv = inUv;
 
@@ -49,5 +49,5 @@ out vec4 FragColor;
 uniform sampler2D textureSampler;
 
 void main() {
-    FragColor = texture(textureSampler, uv);
+    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
 }

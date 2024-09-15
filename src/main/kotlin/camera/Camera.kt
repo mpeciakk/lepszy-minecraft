@@ -1,3 +1,5 @@
+package camera
+
 import input.Input
 import org.joml.Matrix4f
 import org.joml.Vector3f
@@ -9,7 +11,7 @@ class Camera(width: Int, height: Int) {
     val projectionMatrix: Matrix4f
     val viewMatrix = Matrix4f()
 
-    private val position = Vector3f(0f, 0f, 0f)
+    val position = Vector3f(0f, 0f, 0f)
     private val rotation = Vector3f(0f, 0f, 0f)
 
     init {

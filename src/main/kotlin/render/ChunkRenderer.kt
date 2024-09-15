@@ -1,20 +1,19 @@
 package render
 
-import asset.AssetManager
-import asset.Texture
+import camera.Camera
 import chunk.Chunk
+import chunk.Chunk.Companion.CHUNK_SIZE
 import chunk.ChunkBuilderThreadPool
 import chunk.ChunkState
 import org.lwjgl.opengl.GL40.*
 import render.mesh.VertexMesh.Companion.getIntBuffer
-import shader.Shader
 
 class ChunkRenderer : Renderer<Chunk>() {
     private val builderPool = ChunkBuilderThreadPool()
     val list = mutableListOf<Int>()
 
     private fun packValues(x: Int, y: Int, z: Int, n: Int): Int {
-        return x or (y shl 4) or (z shl 13) or (n shl 17)
+        return x or (y shl 5) or (z shl 10) or (n shl 15)
     }
 
     override fun render(t: Chunk) {
@@ -48,15 +47,15 @@ class ChunkRenderer : Renderer<Chunk>() {
 
             println("building")
 
-            for (x in 0..<16) {
-                for (y in 0..<384) {
-                    for (z in 0..<16) {
+            for (x in 0..<CHUNK_SIZE) {
+                for (y in 0..<CHUNK_SIZE) {
+                    for (z in 0..<CHUNK_SIZE) {
                         if (t.blocks[x][y][z] == 1) {
                             val renderNorth = if (z - 1 >= 0) t.blocks[x][y][z - 1] == 0 else true
-                            val renderSouth = if (z + 1 < 16) t.blocks[x][y][z + 1] == 0 else true
-                            val renderEast = if (x + 1 < 16) t.blocks[x + 1][y][z] == 0 else true
+                            val renderSouth = if (z + 1 < CHUNK_SIZE) t.blocks[x][y][z + 1] == 0 else true
+                            val renderEast = if (x + 1 < CHUNK_SIZE) t.blocks[x + 1][y][z] == 0 else true
                             val renderWest = if (x - 1 >= 0) t.blocks[x - 1][y][z] == 0 else true
-                            val renderUp = if (y + 1 < 384) t.blocks[x][y + 1][z] == 0 else true
+                            val renderUp = if (y + 1 < CHUNK_SIZE) t.blocks[x][y + 1][z] == 0 else true
                             val renderDown = if (y - 1 >= 0) t.blocks[x][y - 1][z] == 0 else true
 
                             if (renderNorth) {

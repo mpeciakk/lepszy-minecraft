@@ -1,32 +1,36 @@
 package chunk
 
-import Renderable
+import AABB
 import org.joml.Matrix4f
-import org.lwjgl.opengl.GL15.glGenBuffers
+import org.joml.Vector3f
 import org.lwjgl.opengl.GL40.glEnableVertexAttribArray
 import org.lwjgl.system.MemoryUtil
+import render.Renderable
 import render.mesh.IndicesVBO
 import render.mesh.MeshBuilder
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
+import kotlin.random.Random
 
-
-class Chunk(val originX: Int, val originZ: Int) : Renderable() {
+class Chunk(val originX: Int, val originY: Int, val originZ: Int) : Renderable() {
+    val r = Random.nextInt(0, 255)
     val builder = MeshBuilder()
     var state = ChunkState.NONE
-    val blocks: Array<Array<Array<Int>>> = Array(16) {
-        Array(384) {
-            Array(16) {
+    val position = Vector3f(originX.toFloat(), originY.toFloat(), originZ.toFloat())
+    val blocks: Array<Array<Array<Int>>> = Array(CHUNK_SIZE) {
+        Array(CHUNK_SIZE) {
+            Array(CHUNK_SIZE) {
                 0
             }
         }
     }
 
+    val aabb = AABB(Vector3f(position), Vector3f(CHUNK_SIZE.toFloat(), CHUNK_SIZE.toFloat(), CHUNK_SIZE.toFloat()).add(position))
+
     init {
         for (x in 0..<CHUNK_SIZE) {
-            for (y in 0..<384) {
+            for (y in 0..<CHUNK_SIZE) {
                 for (z in 0..<CHUNK_SIZE) {
-//                    blocks[x][y][z] = 1
                     if ((x + y + z) % 2 == 0) {
                         blocks[x][y][z] = 1
                     }
@@ -35,7 +39,7 @@ class Chunk(val originX: Int, val originZ: Int) : Renderable() {
         }
 
         transformationMatrix = Matrix4f().setTranslation(
-            (originX * CHUNK_SIZE).toFloat(), 0f,
+            (originX * CHUNK_SIZE).toFloat(), (originY * CHUNK_SIZE).toFloat(),
             (originZ * CHUNK_SIZE).toFloat()
         )
 
@@ -50,7 +54,7 @@ class Chunk(val originX: Int, val originZ: Int) : Renderable() {
     }
 
     companion object {
-        const val CHUNK_SIZE = 16
+        const val CHUNK_SIZE = 32
 
         val VERTICES = floatArrayOf(
             -0.5f, -0.5f,

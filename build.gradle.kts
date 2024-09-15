@@ -50,6 +50,11 @@ tasks {
 
 repositories {
     mavenCentral()
+
+    maven {
+        name = "realrobotixImguiJava"
+        url = uri("https://maven.realrobotix.me/imgui-java")
+    }
 }
 
 dependencies {
@@ -62,6 +67,10 @@ dependencies {
     implementation("org.lwjgl", "lwjgl-glfw", classifier = lwjglNatives)
     implementation("org.lwjgl", "lwjgl-opengl", classifier = lwjglNatives)
     implementation("org.joml", "joml", jomlVersion)
+
+    implementation("io.github.spair:imgui-java-binding:1.86.11-10-g0dbf36c")
+    implementation("io.github.spair:imgui-java-lwjgl3:1.86.11-10-g0dbf36c")
+    implementation("io.github.spair:imgui-java-natives-macos:1.86.11-10-g0dbf36c")
 }
 
 kotlin {

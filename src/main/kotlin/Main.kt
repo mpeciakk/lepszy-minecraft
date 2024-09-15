@@ -1,25 +1,28 @@
 import asset.AssetLoader
 import input.Input
 import org.lwjgl.glfw.GLFW
+import org.lwjgl.glfw.GLFW.*
 import window.Window
 import window.WindowHints
 
 class ApplicationWrapper {
-    private val window = Window(800, 600, "Minecraft2")
+    private val window = Window(1600, 900, "Minecraft2")
     private val assetLoader = AssetLoader()
     private var shouldClose = false
 
     fun launch() {
         val hints = WindowHints()
-        hints.openglProfile = GLFW.GLFW_OPENGL_CORE_PROFILE
-        hints.forwardCompat = GLFW.GLFW_TRUE
+        hints.openglProfile = GLFW_OPENGL_CORE_PROFILE
+        hints.forwardCompat = GLFW_TRUE
         hints.contextVersionMajor = 4
         hints.contextVersionMinor = 1
 
         window.create(hints)
 
-        GLFW.glfwSwapInterval(0)
+        glfwSwapInterval(0)
         Input.create(window)
+
+//        glfwSetInputMode(window.id, GLFW_CURSOR, GLFW_CURSOR_DISABLED)
 
         assetLoader.load()
         assetLoader.loadAssets()
@@ -49,7 +52,7 @@ class ApplicationWrapper {
             }
             frames++
 
-            if (Input.isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) {
+            if (Input.isKeyPressed(GLFW_KEY_ESCAPE)) {
                 close()
             }
 
